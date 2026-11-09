@@ -1,8 +1,8 @@
 # RapidFireQR
 
-Optical air-gap data transfer with fountain erasure codes.
+Transfer data between devices using animated QR code streams with your camera and screen. No internet, cables, Wi-Fi, or Bluetooth needed.
 
-RapidFireQR transfers data between devices visually using high-speed animated QR code streams. By using Luby Transform (LT) rateless fountain codes, the system recovers data even with dropped or blurred frames, requiring zero network connection, Wi-Fi permissions, or Bluetooth pairing.
+RapidFireQR splits your text into rapid visual chunks. Even if frames are dropped or blurred due to camera movement, the system automatically pieces the data back together.
 
 The app is built as a Progressive Web App (PWA) and operates completely offline once loaded.
 

@@ -1,7 +1,7 @@
 {
   "name": "RapidFireQR",
   "short_name": "RapidFireQR",
-  "description": "Optical Air-Gap Data Transfer with Fountain Erasure Codes",
+  "description": "Fast visual data transfer between devices",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",

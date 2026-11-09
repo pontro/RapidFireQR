@@ -46,7 +46,6 @@
         header {
             padding: 1.1rem 1.5rem 0.6rem 1.5rem;
             display: flex;
-            justify-content: space-between;
             align-items: center;
             max-width: 960px;
             width: 100%;
@@ -54,29 +53,13 @@
         }
         .brand {
             display: flex;
-            flex-direction: column;
-        }
-        .brand-subtitle {
-            font-size: 0.7rem;
-            color: var(--accent);
-            text-transform: uppercase;
-            letter-spacing: 1.2px;
-            font-weight: 600;
+            align-items: center;
         }
         .brand-title {
-            font-size: 1.35rem;
+            font-size: 1.4rem;
             font-weight: 700;
-            color: var(--text-primary);
+            color: var(--accent);
             letter-spacing: -0.5px;
-        }
-        .header-badge {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            padding: 0.3rem 0.75rem;
-            border-radius: 999px;
-            font-size: 0.75rem;
-            font-weight: 500;
-            color: var(--accent-soft);
         }
 
         /* Main Container */
@@ -751,10 +734,8 @@
 
     <header>
         <div class="brand">
-            <span class="brand-subtitle">Optical Air-Gap</span>
             <span class="brand-title">RapidFireQR</span>
         </div>
-        <div class="header-badge" id="channel-badge">Fountain Ready</div>
     </header>
 
     <main class="main-container">
