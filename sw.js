@@ -1,14 +1,14 @@
-const CACHE_NAME = 'rapidfireqr-v1.1';
+const CACHE_NAME = 'rapidfireqr-v1.2';
 const ASSETS = [
-  './',
-  './index.html',
-  './app.js',
-  './fountain.js',
-  './qrcode.min.js',
-  './jsqr.js',
-  './manifest.json',
-  './icon-192.png',
-  './icon-512.png'
+  '/',
+  '/index.html',
+  '/app.js',
+  '/fountain.js',
+  '/qrcode.min.js',
+  '/jsqr.js',
+  '/manifest.json',
+  '/icon-192.png',
+  '/icon-512.png'
 ];
 
 self.addEventListener('install', (event) => {
