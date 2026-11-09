@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>RapidFire</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
+    <link rel="apple-touch-icon" href="./icon-192.png">
+    <meta name="theme-color" content="#222222">
+    <style>
+        :root {
+            --bg-color: #222222;
+            --surface: #2b2b2b;
+            --surface-elevated: #333333;
+            --border: #3d3d3d;
+            --accent: #FBAB57;
+            --accent-soft: #FEC674;
+            --text-primary: #FFF3E2;
+            --text-secondary: #a39c94;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 10px;
+            --ease-fluid: cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            padding-bottom: 85px;
+        }
+
+        /* Top Header */
+        header {
+            padding: 1.1rem 1.5rem 0.6rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 960px;
+            width: 100%;
+            margin: 0 auto;
+        }
+        .brand {
+            display: flex;
+            flex-direction: column;
+        }
+        .brand-subtitle {
+            font-size: 0.7rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            font-weight: 600;
+        }
+        .brand-title {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: -0.5px;
+        }
+        .header-badge {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 0.3rem 0.75rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--accent-soft);
+        }
+
+        /* Main Container */
+        .main-container {
+            flex: 1;
+            padding: 0.5rem 1.25rem 1rem 1.25rem;
+            max-width: 520px;
+            width: 100%;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .screen {
+            display: none;
+            flex-direction: column;
+            gap: 1rem;
+            width: 100%;
+        }
+        .screen.active {
+            display: flex;
+        }
+
+        /* Card Primitive */
+        .card {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            padding: 1.15rem;
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        /* Preset Chips */
+        .presets-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+        }
+        .preset-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+        .chips-container {
+            display: flex;
+            gap: 0.4rem;
+            flex-wrap: wrap;
+        }
+        .chip {
+            background: var(--surface-elevated);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            padding: 0.35rem 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .chip:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        .chip:active {
+            background: var(--accent);
+            color: #222222;
+        }
+
+        /* Textarea */
+        textarea {
+            width: 100%;
+            height: 100px;
+            background: #1c1c1c;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            padding: 0.75rem;
+            resize: none;
+            font-size: 0.85rem;
+            line-height: 1.4;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        textarea:focus {
+            border-color: var(--accent);
+        }
+
+        /* Buttons */
+        .btn-group {
+            display: flex;
+            gap: 0.6rem;
+        }
+        .btn {
+            background: var(--accent);
+            color: #222222;
+            border: none;
+            padding: 0.8rem 1.2rem;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            flex: 1;
+            transition: opacity 0.15s, transform 0.05s;
+        }
+        .btn:active {
+            transform: scale(0.98);
+        }
+        .btn-secondary {
+            background: var(--surface-elevated);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+            flex: initial;
+            padding: 0.8rem 1rem;
+        }
+        .btn-secondary:hover {
+            background: #3a3a3a;
+        }
+        .btn-danger {
+            background: #e05d5d;
+            color: #ffffff;
+        }
+
+        /* Speed Segmented Toggle */
+        .speed-toggle {
+            display: flex;
+            background: #1c1c1c;
+            border-radius: 999px;
+            padding: 4px;
+            border: 1px solid var(--border);
+            gap: 4px;
+            align-items: stretch;
+        }
+        .speed-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 0.5rem 1.25rem;
+            min-width: 76px;
+            border-radius: 999px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .speed-btn.active {
+            background: var(--accent);
+            color: #222222;
+        }
+
+        /* Switch toggle */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .switch-slider {
+            position: absolute;
+            cursor: pointer;
+            inset: 0;
+            background-color: #1c1c1c;
+            border: 1px solid var(--border);
+            transition: 0.2s;
+            border-radius: 999px;
+        }
+        .switch-slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 3px;
+            bottom: 3px;
+            background-color: var(--text-secondary);
+            transition: 0.2s;
+            border-radius: 50%;
+        }
+        .switch input:checked + .switch-slider {
+            background-color: var(--accent);
+            border-color: var(--accent);
+        }
+        .switch input:checked + .switch-slider:before {
+            transform: translateX(20px);
+            background-color: #222222;
+        }
+
+        /* Slider */
+        .slider-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+        .slider-row strong {
+            color: var(--text-primary);
+        }
+        input[type="range"] {
+            accent-color: var(--accent);
+            cursor: pointer;
+        }
+
+        /* QR Frame */
+        .qr-wrapper {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1.15rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .qr-inner {
+            background: #ffffff;
+            border-radius: var(--radius-md);
+            padding: 12px;
+            width: 260px;
+            height: 260px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .qr-inner canvas, .qr-inner img {
+            max-width: 100%;
+            max-height: 100%;
+            display: block;
+        }
+        .qr-placeholder-wrap {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.85;
+            transition: opacity 0.2s;
+        }
+        .placeholder-qr-svg {
+            width: 100%;
+            height: 100%;
+            max-width: 230px;
+            max-height: 230px;
+        }
+
+        .qr-placeholder {
+            color: #888888;
+            font-size: 0.85rem;
+            text-align: center;
+        }
+        .qr-status-pill {
+            margin-top: 0.75rem;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Animated Summary Card / Pill (Mobile) */
+        .beaming-summary-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            overflow: hidden;
+            transition: all 0.3s var(--ease-fluid);
+        }
+        .beaming-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .beaming-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        .beaming-meta {
+            font-size: 0.75rem;
+            color: var(--accent);
+        }
+
+        /* Receiver Screen */
+        .camera-card {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+            overflow: hidden;
+            position: relative;
+            width: 100%;
+            aspect-ratio: 1/1;
+            max-width: 360px;
+            margin: 0 auto;
+        }
+        #camera-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .camera-overlay {
+            position: absolute;
+            inset: 18%;
+            border: 2px solid var(--accent);
+            border-radius: var(--radius-md);
+            box-shadow: 0 0 0 9999px rgba(28, 28, 28, 0.45);
+            pointer-events: none;
+        }
+
+        /* Progress indicator */
+        .progress-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1.1rem 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            min-height: 20px;
+        }
+        .progress-status {
+            color: var(--text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 280px;
+        }
+        .progress-val {
+            color: var(--accent);
+            font-weight: 700;
+        }
+        .progress-track {
+            background: #1c1c1c;
+            border-radius: 999px;
+            height: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: var(--accent);
+            border-radius: 999px;
+            transition: width 0.15s ease-out;
+        }
+        .progress-subtext {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .ack-view-container {
+            display: none;
+            width: 100%;
+            height: 100%;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            padding: 0.85rem;
+            gap: 0.6rem;
+            text-align: center;
+        }
+        .ack-badge {
+            background: #222222;
+            color: var(--accent);
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.35rem 0.85rem;
+            border-radius: 999px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        /* Result View */
+        .result-card {
+            background: var(--surface);
+            border: 1px solid var(--accent);
+            border-radius: var(--radius-lg);
+            padding: 1.15rem;
+            display: none;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        .result-title {
+            color: var(--accent-soft);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        .ack-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: var(--surface-elevated);
+            padding: 0.75rem;
+            border-radius: var(--radius-md);
+            margin-top: 0.3rem;
+        }
+        .ack-qr-holder {
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 6px;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+        .ack-info {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            line-height: 1.35;
+        }
+
+        /* Bottom Fixed Navigation Bar */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(34, 34, 34, 0.95);
+            backdrop-filter: blur(16px);
+            border-top: 1px solid var(--border);
+            padding: 0.6rem 1.5rem calc(0.6rem + env(safe-area-inset-bottom, 0px)) 1.5rem;
+            display: flex;
+            justify-content: center;
+            z-index: 100;
+        }
+        .nav-dock {
+            display: flex;
+            background: var(--surface);
+            border-radius: 999px;
+            padding: 4px;
+            border: 1px solid var(--border);
+            width: 100%;
+            max-width: 320px;
+        }
+        .nav-item {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.45rem;
+            padding: 0.65rem 1rem;
+            border-radius: 999px;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .nav-item svg {
+            width: 18px;
+            height: 18px;
+            stroke-width: 2.2;
+        }
+        .nav-item.active {
+            background: var(--accent);
+            color: #222222;
+        }
+
+        /* ========================================================
+           RESPONSIVE & FLUID COLLAPSE ANIMATIONS
+           ======================================================== */
+
+        /* Collapsible container shared base */
+        .collapsible-group {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+            width: 100%;
+        }
+
+        /* DESKTOP / PC (Two columns) */
+        @media (min-width: 768px) {
+            .main-container {
+                max-width: 860px;
+            }
+            #screen-send {
+                display: none;
+            }
+            #screen-send.active {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 1.25rem;
+                align-items: start;
+            }
+            .send-controls-col {
+                display: flex;
+                flex-direction: column;
+                gap: 1.25rem;
+            }
+            .send-preview-col {
+                display: flex;
+                flex-direction: column;
+                gap: 1.25rem;
+            }
+            .send-preview-col .qr-wrapper {
+                height: 100%;
+                min-height: 380px;
+            }
+            .send-preview-col .qr-inner {
+                width: 280px;
+                height: 280px;
+            }
+            .beaming-summary-card {
+                display: none !important;
+            }
+
+            /* Receive Screen on Desktop */
+            #screen-recv {
+                display: none;
+            }
+            #screen-recv.active {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 1.25rem;
+                align-items: start;
+            }
+            .recv-status-col {
+                display: flex;
+                flex-direction: column;
+                gap: 1.25rem;
+            }
+            .recv-camera-col {
+                display: flex;
+                flex-direction: column;
+                gap: 0.85rem;
+                align-items: center;
+            }
+            .recv-camera-col .camera-card {
+                max-width: 310px;
+                width: 310px;
+                height: 310px;
+                min-height: 310px;
+            }
+            .recv-camera-col .btn-group {
+                width: 310px;
+            }
+            .recv-status-col #result-text {
+                height: 165px;
+            }
+            .hide-on-pc {
+                display: none !important;
+            }
+        }
+
+        /* MOBILE (< 768px): Fluid Morphing Collapse Animation */
+        @media (max-width: 767px) {
+            .send-controls-col, .recv-status-col, .recv-camera-col {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+                gap: 1rem;
+            }
+
+            /* The collapsible input card container */
+            .collapsible-group {
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+                max-height: 520px;
+                opacity: 1;
+                transform: translateY(0);
+                overflow: hidden;
+                transition: max-height 0.35s var(--ease-fluid), opacity 0.25s var(--ease-fluid), transform 0.3s var(--ease-fluid);
+            }
+
+            /* Beaming summary pill (idle: collapsed to 0) */
+            .beaming-summary-card {
+                max-height: 0;
+                opacity: 0;
+                padding: 0 1.15rem;
+                margin-bottom: 0;
+                border: 0 solid var(--border);
+                transform: translateY(-8px);
+                pointer-events: none;
+            }
+
+            /* QR Preview Container (idle: hidden) */
+            .send-preview-col {
+                display: flex;
+                flex-direction: column;
+                max-height: 0;
+                opacity: 0;
+                transform: translateY(16px) scale(0.96);
+                overflow: hidden;
+                pointer-events: none;
+                transition: max-height 0.35s var(--ease-fluid), opacity 0.3s var(--ease-fluid), transform 0.35s var(--ease-fluid);
+            }
+
+            /* --- ACTIVE BEAMING MORPH STATE --- */
+            #screen-send.is-beaming .collapsible-group {
+                max-height: 0;
+                opacity: 0;
+                transform: translateY(-12px);
+                pointer-events: none;
+                margin: 0;
+            }
+
+            #screen-send.is-beaming .beaming-summary-card {
+                max-height: 80px;
+                opacity: 1;
+                padding: 0.85rem 1.15rem;
+                margin-bottom: 1rem;
+                border: 1px solid var(--border);
+                transform: translateY(0);
+                pointer-events: auto;
+            }
+
+            #screen-send.is-beaming .send-preview-col {
+                max-height: 480px;
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                overflow: visible;
+                pointer-events: auto;
+            }
+
+            /* --- RECEIVER MOBILE RE-ORDERING ON COMPLETION --- */
+            /* When complete on mobile: ACK QR on top, then Copy button & Data Overview */
+            #screen-recv.is-complete {
+                display: flex;
+                flex-direction: column;
+            }
+            #screen-recv.is-complete .recv-camera-col {
+                order: 1;
+                margin-bottom: 0.5rem;
+            }
+            #screen-recv.is-complete .recv-status-col {
+                order: 2;
+            }
+            #screen-recv.is-complete .progress-card {
+                display: none;
+            }
+            #screen-recv.is-complete .camera-card {
+                max-width: 250px;
+                height: 250px;
+                margin: 0 auto;
+            }
+            #screen-recv.is-complete #result-text {
+                min-height: 120px;
+            }
+            #screen-recv.is-complete #btn-flip {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="brand">
+            <span class="brand-subtitle">Optical Air-Gap</span>
+            <span class="brand-title">RapidFire</span>
+        </div>
+        <div class="header-badge" id="channel-badge">Fountain Ready</div>
+    </header>
+
+    <main class="main-container">
+
+        <!-- SCREEN 1: SEND -->
+        <section id="screen-send" class="screen active">
+            
+            <!-- Left / Top Column: Controls & Input -->
+            <div class="send-controls-col">
+                <!-- Mobile active summary banner (morphs in when beaming) -->
+                <div class="beaming-summary-card" id="beaming-summary-bar">
+                    <div class="beaming-info">
+                        <span class="beaming-title">Active Optical Stream</span>
+                        <span class="beaming-meta" id="mobile-stream-meta">Streaming payload...</span>
+                    </div>
+                    <button class="btn btn-danger" style="flex:initial; padding:0.5rem 0.9rem; font-size:0.8rem;" onclick="toggleSending()">
+                        Stop
+                    </button>
+                </div>
+
+                <!-- Collapsible Input Group (smoothly animates closed on mobile) -->
+                <div class="collapsible-group" id="collapsible-controls">
+                    <div class="card" id="input-card">
+                        <div class="presets-row">
+                            <span class="preset-label">Presets</span>
+                            <div class="chips-container">
+                                <button class="chip" onclick="loadPreset('small')">Small</button>
+                                <button class="chip" onclick="loadPreset('medium')">Medium</button>
+                                <button class="chip" onclick="loadPreset('large')">Large</button>
+                                <button class="chip" onclick="loadPreset('heavy')">Heavy</button>
+                            </div>
+                        </div>
+
+                        <textarea id="send-input" placeholder="Type text or paste payload to beam..."></textarea>
+
+                        <button class="btn" id="start-beam-btn" onclick="toggleSending()">
+                            Start Beaming
+                        </button>
+                    </div>
+
+                    <div class="card" id="speed-card" style="padding: 0.85rem 1.15rem; gap: 0.85rem;">
+                        <div class="slider-row">
+                            <span>Speed</span>
+                            <div class="speed-toggle">
+                                <button class="speed-btn active" id="speed-safe" onclick="setSpeed(8)">Safe</button>
+                                <button class="speed-btn" id="speed-turbo" onclick="setSpeed(15)">Turbo</button>
+                            </div>
+                        </div>
+                        <div class="slider-row" style="border-top: 1px solid var(--border); padding-top: 0.75rem;">
+                            <span>Auto-Stop with Camera</span>
+                            <label class="switch">
+                                <input type="checkbox" id="toggle-ack-watcher" onchange="toggleAckWatcher(this.checked)">
+                                <span class="switch-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right / Bottom Column: QR Stream Display -->
+            <div class="send-preview-col">
+                <div class="qr-wrapper">
+                    <div class="qr-inner" id="qr-canvas-container">
+                        <div class="qr-placeholder-wrap">
+                            <svg class="placeholder-qr-svg" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <!-- Finder top-left -->
+                                <rect x="14" y="14" width="44" height="44" rx="7" stroke="#222222" stroke-width="6"/>
+                                <rect x="26" y="26" width="20" height="20" rx="3" fill="#222222"/>
+
+                                <!-- Finder top-right -->
+                                <rect x="142" y="14" width="44" height="44" rx="7" stroke="#222222" stroke-width="6"/>
+                                <rect x="154" y="26" width="20" height="20" rx="3" fill="#222222"/>
+
+                                <!-- Finder bottom-left -->
+                                <rect x="14" y="142" width="44" height="44" rx="7" stroke="#222222" stroke-width="6"/>
+                                <rect x="26" y="154" width="20" height="20" rx="3" fill="#222222"/>
+
+                                <!-- Alignment pattern bottom-right -->
+                                <rect x="144" y="144" width="34" height="34" rx="5" stroke="#999999" stroke-width="4" stroke-dasharray="5 3"/>
+                                <rect x="156" y="156" width="10" height="10" rx="2" fill="#999999"/>
+
+                                <!-- Muted matrix modules -->
+                                <g fill="#aaaaaa" opacity="0.65">
+                                    <rect x="70" y="18" width="8" height="8" rx="2"/>
+                                    <rect x="88" y="18" width="8" height="8" rx="2"/>
+                                    <rect x="106" y="18" width="8" height="8" rx="2"/>
+                                    <rect x="124" y="18" width="8" height="8" rx="2"/>
+
+                                    <rect x="70" y="36" width="8" height="8" rx="2"/>
+                                    <rect x="106" y="36" width="8" height="8" rx="2"/>
+                                    
+                                    <rect x="70" y="54" width="8" height="8" rx="2"/>
+                                    <rect x="88" y="54" width="8" height="8" rx="2"/>
+                                    <rect x="124" y="54" width="8" height="8" rx="2"/>
+
+                                    <rect x="18" y="72" width="8" height="8" rx="2"/>
+                                    <rect x="36" y="72" width="8" height="8" rx="2"/>
+                                    <rect x="54" y="72" width="8" height="8" rx="2"/>
+                                    <rect x="140" y="72" width="8" height="8" rx="2"/>
+                                    <rect x="158" y="72" width="8" height="8" rx="2"/>
+                                    <rect x="176" y="72" width="8" height="8" rx="2"/>
+
+                                    <rect x="18" y="90" width="8" height="8" rx="2"/>
+                                    <rect x="54" y="90" width="8" height="8" rx="2"/>
+                                    <rect x="140" y="90" width="8" height="8" rx="2"/>
+                                    <rect x="176" y="90" width="8" height="8" rx="2"/>
+
+                                    <rect x="18" y="108" width="8" height="8" rx="2"/>
+                                    <rect x="36" y="108" width="8" height="8" rx="2"/>
+                                    <rect x="158" y="108" width="8" height="8" rx="2"/>
+
+                                    <rect x="18" y="126" width="8" height="8" rx="2"/>
+                                    <rect x="54" y="126" width="8" height="8" rx="2"/>
+                                    <rect x="140" y="126" width="8" height="8" rx="2"/>
+
+                                    <rect x="70" y="142" width="8" height="8" rx="2"/>
+                                    <rect x="88" y="142" width="8" height="8" rx="2"/>
+                                    <rect x="106" y="142" width="8" height="8" rx="2"/>
+
+                                    <rect x="88" y="160" width="8" height="8" rx="2"/>
+                                    <rect x="124" y="160" width="8" height="8" rx="2"/>
+
+                                    <rect x="70" y="178" width="8" height="8" rx="2"/>
+                                    <rect x="106" y="178" width="8" height="8" rx="2"/>
+                                    <rect x="124" y="178" width="8" height="8" rx="2"/>
+                                </g>
+
+                                <!-- Center Standby Badge -->
+                                <rect x="58" y="84" width="84" height="32" rx="16" fill="#222222"/>
+                                <text x="100" y="104" text-anchor="middle" font-size="10" font-weight="700" fill="#FBAB57" letter-spacing="1.5">STANDBY</text>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="qr-status-pill" id="beam-stats">Stream idle</div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- SCREEN 2: RECEIVE -->
+        <section id="screen-recv" class="screen">
+            <!-- Left Column: Status, Progress & Results -->
+            <div class="recv-status-col">
+                <div class="progress-card">
+                    <div class="progress-header">
+                        <span class="progress-status" id="recv-status">Camera ready. Aim at sender.</span>
+                        <span class="progress-val" id="recv-pct">0%</span>
+                    </div>
+                    <div class="progress-track">
+                        <div class="progress-bar" id="recv-bar"></div>
+                    </div>
+                    <div class="progress-subtext">
+                        <span id="recv-chunks">Blocks: 0 / 0</span>
+                        <span id="recv-fps">0 FPS</span>
+                    </div>
+                </div>
+
+                <!-- Result Card (appears directly under the progress pill) -->
+                <div class="result-card" id="result-box">
+                    <button class="btn" id="btn-copy-result" onclick="copyResult()">Copy to Clipboard</button>
+                    <textarea id="result-text" readonly></textarea>
+                </div>
+            </div>
+
+            <!-- Right Column: Camera Viewport & Controls -->
+            <div class="recv-camera-col">
+                <div class="camera-card" id="recv-camera-card">
+                    <video id="camera-video" playsinline autoplay muted></video>
+                    <div class="camera-overlay" id="camera-overlay"></div>
+
+                    <!-- ACK QR View (Replaces camera video upon completion) -->
+                    <div class="ack-view-container" id="ack-view-container">
+                        <div class="ack-qr-holder" id="ack-qr-code"></div>
+                        <span class="ack-badge">Verification QR</span>
+                    </div>
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn btn-secondary hide-on-pc" id="btn-flip" style="flex:1;" onclick="switchCamera()">
+                        Flip Camera
+                    </button>
+                    <button class="btn btn-secondary" id="btn-reset" style="flex:1;" onclick="resetReceiver()">
+                        Reset
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Hidden Video for Sender Background ACK Scanner -->
+        <video id="sender-camera-video" playsinline autoplay muted style="display:none;"></video>
+
+    </main>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="bottom-nav">
+        <div class="nav-dock">
+            <button class="nav-item active" id="nav-btn-send" onclick="switchTab('send')">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                Send
+            </button>
+            <button class="nav-item" id="nav-btn-recv" onclick="switchTab('recv')">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 4v12m0 0l-4-4m4 4l4-4M4 20h16"/></svg>
+                Receive
+            </button>
+        </div>
+    </nav>
+
+    <!-- Scripts -->
+    <script src="qrcode.min.js"></script>
+    <script src="jsqr.js"></script>
+    <script type="module" src="app.js"></script>
+</body>
+</html>
