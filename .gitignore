@@ -4,3 +4,4 @@ serve.py
 make_icons.py
 __pycache__/
 .DS_Store
+node_modules/
