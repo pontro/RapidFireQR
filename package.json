@@ -1,0 +1,21 @@
+{
+  "name": "rapidfire-qr",
+  "version": "1.0.0",
+  "description": "Transfer data between devices using animated QR code streams",
+  "type": "module",
+  "scripts": {
+    "dev": "npx serve .",
+    "build": "echo 'No build step required for static site'"
+  },
+  "keywords": [
+    "qr",
+    "data-transfer",
+    "offline",
+    "pwa"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@vercel/analytics": "^1.4.1"
+  }
+}
