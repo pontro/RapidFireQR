@@ -1,4 +1,4 @@
-const CACHE_NAME = 'rapidfireqr-v1.2';
+const CACHE_NAME = 'rapidfireqr-v1.3';
 const ASSETS = [
   '/',
   '/index.html',
@@ -8,7 +8,8 @@ const ASSETS = [
   '/jsqr.js',
   '/manifest.json',
   '/icon-192.png',
-  '/icon-512.png'
+  '/icon-512.png',
+  '/analytics.js'
 ];
 
 self.addEventListener('install', (event) => {
@@ -28,6 +29,11 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
+  // Never intercept analytics or non-GET requests
+  if (event.request.method !== 'GET' || event.request.url.includes('/_vercel/')) {
+    return;
+  }
+
   event.respondWith(
     caches.match(event.request).then((res) => res || fetch(event.request))
   );
