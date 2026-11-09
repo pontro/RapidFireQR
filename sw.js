@@ -1,4 +1,4 @@
-const CACHE_NAME = 'rapidfire-qr-v23';
+const CACHE_NAME = 'rapidfireqr-v1.0';
 const ASSETS = [
   './',
   './index.html',

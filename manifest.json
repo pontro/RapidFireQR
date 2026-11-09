@@ -1,7 +1,7 @@
 {
-  "name": "RapidFire QR",
-  "short_name": "RapidFire",
-  "description": "Optical Air-Gap Data Transfer with Fountain Codes",
+  "name": "RapidFireQR",
+  "short_name": "RapidFireQR",
+  "description": "Optical Air-Gap Data Transfer with Fountain Erasure Codes",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
