@@ -1,5 +1,5 @@
-// Vercel Web Analytics initialization
-import { inject } from 'https://cdn.jsdelivr.net/npm/@vercel/analytics@1/dist/index.js';
+// Vercel Web Analytics ESM initialization
+import { inject } from 'https://cdn.jsdelivr.net/npm/@vercel/analytics@1/+esm';
 
 try {
   inject();
